@@ -1,0 +1,13 @@
+[
+	{
+		"testId": "test1",
+		"title": "Тест по QA",
+		"questions": [
+			{
+				"id": 1,
+				"question": "Что такое переменная ?",
+				"correctAnswer": "yes"
+			}
+		]
+	}
+]

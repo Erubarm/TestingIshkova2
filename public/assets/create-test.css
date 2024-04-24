@@ -1,0 +1,155 @@
+body {
+	font-family: 'Inter', sans-serif;
+	background-color: #f4f4f4;
+	margin: 0;
+	padding: 30px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+header {
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	width: 100%;
+	max-width: 600px;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+}
+
+form label {
+	margin-top: 1em;
+}
+
+form input {
+	padding: 8px;
+	margin-top: 0.5em;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+/* Общие стили для обеих кнопок */
+.action-button {
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	outline: none;
+	font-size: 16px;
+	font-weight: 600;
+	margin: 10px;
+	transition: background-color 0.3s ease-out, transform 0.1s ease;
+}
+
+.button-like-link {
+	text-align: center;
+	margin-top: 20px;
+	background-color: transparent;
+	color: #5a67d8;
+	text-decoration: none;
+	padding: 6px 12px;
+	border: 2px solid #5a67d8;
+	border-radius: 4px;
+	transition: all 0.3s;
+}
+
+.button-like-link:hover {
+	background-color: #5a67d8;
+	color: white;
+}
+
+.question-block label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+/* Эффекты наведения и активного состояния для обеих кнопок */
+.action-button:hover {
+	background-color: #45a049; /* Слегка затемненный зеленый */
+}
+
+.action-button:active {
+	transform: translateY(2px); /* Подобие эффекта нажатия */
+}
+
+/* Стили специфичные для кнопки "Добавить вопрос" */
+#add-question-button {
+	background-color: #fdd835; /* Желтый цвет */
+}
+
+#add-question-button:hover {
+	background-color: #fbc02d; /* Затемненный желтый */
+}
+
+/* Стили специфичные для кнопки "Создать тест" */
+#submit-test-button {
+	background-color: #2196f3; /* Синий цвет */
+}
+
+#submit-test-button:hover {
+	background-color: #1e88e5; /* Затемненный синий */
+}
+
+#add-question-btn {
+	margin: 20px 0;
+	padding: 10px 15px;
+	background-color: #48bb78;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+form button[type='submit'] {
+	padding: 10px 15px;
+	background-color: #3182ce;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+/* Стили для полей ввода */
+.question-text-input,
+.question-answer-input {
+	width: 100%;
+	padding: 8px;
+	margin-bottom: 10px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-sizing: border-box; /* Управляем макетом через border-box */
+}
+
+.delete-question-btn {
+	background-color: #ff4d4d;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+	margin-top: 10px;
+}
+
+.delete-question-btn:hover,
+.delete-question-btn:focus {
+	background-color: #ff3333;
+	transform: scale(1.05);
+}
+
+.delete-question-btn:active {
+	transform: scale(0.95);
+}
+
+.delete-question-btn:focus {
+	outline: none; /* Убрать стандартный outline для кнопок в фокусе */
+	box-shadow: 0 0 0 2px rgba(255, 77, 77, 0.5); /* Добавить тень для акцента */
+}

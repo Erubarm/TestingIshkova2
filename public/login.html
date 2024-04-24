@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="./assets/authAndReg.css" />
+		<title>Авторизация</title>
+	</head>
+	<body>
+		<header>
+			<h2>Форма авторизации</h2>
+			<a href="./register.html">Регистрация</a>
+		</header>
+
+		<form id="loginForm">
+			<label for="username">Имя пользователя:</label>
+			<input type="text" id="username" name="username" required />
+			<label for="password">Пароль:</label>
+			<input type="password" id="password" name="password" required />
+			<button type="submit">Войти</button>
+		</form>
+		<script src="login.js"></script>
+	</body>
+</html>

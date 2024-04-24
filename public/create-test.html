@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+			rel="stylesheet"
+		/>
+		<title>Создание теста</title>
+		<link rel="stylesheet" href="./assets/create-test.css" />
+	</head>
+	<body>
+		<header>
+			<h1>Создание нового теста</h1>
+			<a href="./home-page.html" class="button-like-link"
+				>Вернуться на главную</a
+			>
+		</header>
+		<main>
+			<form id="create-test-form">
+				<label for="test-title">Название теста:</label>
+				<input id="test-title" type="text" required />
+
+				<div id="questions-container">
+					<!-- Вопросы добавляются здесь -->
+				</div>
+
+				<button type="button" id="add-question-btn" class="action-button">
+					Добавить вопрос
+				</button>
+				<button type="submit" id="submit-test-button" class="action-button">
+					Создать тест
+				</button>
+			</form>
+		</main>
+		<script src="./create-test.js"></script>
+	</body>
+</html>

@@ -1,0 +1,36 @@
+[
+	{
+		"id": "test1",
+		"name": "Основы JavaScript",
+		"description": "Тест на знание основ JavaScript",
+		"questions": [
+			{
+				"id": "q1",
+				"text": "JavaScript - это то же самое, что и Java?",
+				"correctAnswer": "Нет"
+			},
+			{
+				"id": "q2",
+				"text": "С помощью какого тега в HTML можно добавить JavaScript код?",
+				"correctAnswer": "Да"
+			}
+		]
+	},
+	{
+		"id": "test2",
+		"name": "Основы HTML",
+		"description": "Тест на знание основ HTML",
+		"questions": [
+			{
+				"id": "q1",
+				"text": "Тег используется для задания заголовка страницы?",
+				"correctAnswer": "Да"
+			},
+			{
+				"id": "q2",
+				"text": "<div> - это строчный элемент?",
+				"correctAnswer": "Нет"
+			}
+		]
+	}
+]
