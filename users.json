@@ -23,5 +23,43 @@
     "username": "79040293135",
     "password": "$2b$10$0wNKHhyRffWw3JxPhkVJx.PJrsnX.kmzGbRb1cbcrFJp/i9iiPEiq",
     "completedTests": []
+  },
+  {
+    "username": "Snezhana555",
+    "password": "$2b$10$eapcu2pCjV.TIMNN5ev1Sebai7aYEp1F.FBhaKGGHLyXn6grZx93.",
+    "completedTests": [
+      {
+        "testName": "2",
+        "score": 2
+      },
+      {
+        "testName": "1",
+        "score": 2
+      },
+      {
+        "testName": "1",
+        "score": 2
+      },
+      {
+        "testName": "2",
+        "score": 2
+      },
+      {
+        "testName": "2",
+        "score": 4
+      },
+      {
+        "testName": "2",
+        "score": 2
+      },
+      {
+        "testName": "2",
+        "score": 2
+      },
+      {
+        "testName": "2",
+        "score": 2
+      }
+    ]
   }
 ]

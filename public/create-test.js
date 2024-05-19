@@ -1,66 +1,90 @@
 // Функция для добавления нового вопроса в тест
 function addQuestion() {
-	const questionsContainer = document.getElementById('questions-container')
-	if (!questionsContainer) {
-		console.error('Контейнер для вопросов не найден!')
-		return
-	}
-	const questionIndex = questionsContainer.children.length + 1
-	const questionHtml = `
+    const questionsContainer = document.getElementById('questions-container')
+    if (!questionsContainer) {
+        console.error('Контейнер для вопросов не найден!')
+        return
+    }
+    const questionIndex = questionsContainer.children.length + 1
+    const questionHtml = `
     <div class="question-block">
       <label for="question-text-${questionIndex}">Вопрос ${questionIndex}</label>
       <input type="text" id="question-text-${questionIndex}" name="question-text-${questionIndex}" class="question-text-input" placeholder="Введите текст вопроса">
-      <label for="question-answer-${questionIndex}">Правильный ответ</label>
-      <input type="text" id="question-answer-${questionIndex}" name="question-answer-${questionIndex}" class="question-answer-input" placeholder="Введите правильный ответ">
+      <fieldset>
+        <legend>Правильный ответ</legend>
+        <label>
+          <input type="radio" id="question-answer-yes-${questionIndex}" name="question-answer-${questionIndex}" value="Да">
+          Да
+        </label>
+        <label>
+          <input type="radio" id="question-answer-no-${questionIndex}" name="question-answer-${questionIndex}" value="Нет">
+          Нет
+        </label>
+      </fieldset>
       <button type="button" onclick="removeQuestion(this)" class="delete-question-btn">Удалить вопрос</button>
     </div>
   `
-	questionsContainer.insertAdjacentHTML('beforeend', questionHtml)
+    questionsContainer.insertAdjacentHTML('beforeend', questionHtml)
 }
+
 
 // Функция для удаления вопроса из теста
 function removeQuestion(button) {
 	button.parentElement.remove()
 }
 
-// Функция для сбора данных из формы и отправки их на сервер
+function generateUUID() {
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+   }
+
+
 function submitTest() {
-	const testTitle = document.getElementById('test-title').value
-	const questionElements = document.querySelectorAll('.question-block')
-	const questions = Array.from(questionElements).map(questionElement => {
-		return {
-			text: questionElement.querySelector('.question-text-input').value,
-			answer: questionElement.querySelector('.question-answer-input').value,
-		}
-	})
+	const testId = generateUUID(); // Функция для генерации уникального ID теста
+    const testTitle = document.getElementById('test-title').value;
+    const questionElements = document.querySelectorAll('.question-block');
+    const questions = Array.from(questionElements).map(questionElement => {
+        const questionId = generateUUID(); // Генерация уникального ID для вопроса
+        const text = questionElement.querySelector('.question-text-input').value;
+        const correctAnswer = questionElement.querySelector('input[type="radio"]:checked').value;
 
-	const test = {
-		title: testTitle,
-		questions: questions,
-	}
+        return {
+            id: questionId, // Добавление уникального ID в объект вопроса
+            text,
+            correctAnswer,
+        };
+    });
 
-	// Здесь должен быть код для отправки теста на сервер, например:
-	fetch('/api/tests', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(test),
-	})
-		.then(response => {
-			if (!response.ok) {
-				throw new Error('Проблема с отправкой теста на сервер')
-			}
-			return response.json()
-		})
-		.then(result => {
-			// Обработка результата, например, можно перенаправить пользователя на страницу с подтверждением создания теста
-			window.location.href = `/test-created.html?testId=${result.testId}`
-		})
-		.catch(error => {
-			console.error('Ошибка:', error)
-			// Обработка ошибки, например, можно показать сообщение об ошибке пользователю
-		})
+    const test = {
+    	id: testId,
+        title: testTitle,
+        questions,
+    };
+
+    // Отправка теста на сервер
+    fetch('/api/tests', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(test),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Проблема с отправкой теста на сервер');
+        }
+        return response.json();
+    })
+    .then(result => {
+        // Обработка результата
+        console.log('Тест успешно создан:', result);
+        window.location.href = `/home-page.html`;
+    })
+    .catch(error => {
+        // Обработка ошибки
+        console.error('Ошибка:', error);
+    });
 }
 
 document
@@ -68,7 +92,7 @@ document
 	.addEventListener('click', addQuestion)
 
 // Прослушиватель событий для кнопки отправки теста
-document.getElementById('submit-test-btn').addEventListener('click', submitTest)
+document.getElementById('submit-test-btn').addEventListener('click', submitTest);
 
 // Добавление первого вопроса, когда DOM полностью загружен
 document.addEventListener('DOMContentLoaded', function () {

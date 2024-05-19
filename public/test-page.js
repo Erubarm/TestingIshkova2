@@ -1,6 +1,6 @@
 let currentTest = null
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
 	// Функция для получения параметров из URL
 	function getQueryParam(param) {
 		const urlParams = new URLSearchParams(window.location.search)
@@ -45,32 +45,33 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	// Обработчик для кнопки отправки теста
-	document.getElementById('submit-test').addEventListener('click', function () {
+	document.getElementById('submit-test').addEventListener('click', function() {
 		if (!currentTest) {
 			console.error('Тест не загружен или не определен')
 			return
 		}
 
-		const answers = {}
+		const answers = {};
 		currentTest.questions.forEach((question, index) => {
-			// Получаем выбранное значение радиокнопки для каждого вопроса
-			const radios = document.getElementsByName(`question${index}`)
+			const radios = document.getElementsByName(`question${index}`);
 			for (const radio of radios) {
 				if (radio.checked) {
-					answers[question.id] = radio.value
-					break
+					answers[question.id] = radio.value;
+					break;
 				}
 			}
-		})
+		});
 
 		// Отправляем ответы на сервер
 		fetch(`/api/tests/${testId}/submit`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ answers }),
-		})
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					answers
+				}),
+			})
 			.then(response => {
 				if (!response.ok) {
 					throw new Error('Проблема с отправкой ответов на сервер')
@@ -80,8 +81,9 @@ document.addEventListener('DOMContentLoaded', function () {
 			.then(result => {
 				// Выводим результат теста
 				console.log('Результат теста:', result)
+				console.log('Количество правильных ответов', result.score)
 				alert(
-					`Вы ответили правильно на ${result.correctAnswersCount} из ${result.totalQuestions} вопросов.`
+					`Вы ответили правильно на ${result.score} из ${result.totalQuestions} вопросов.`
 				)
 				// Здесь можно отобразить результат пользователю, например, с помощью alert или на странице
 			})

@@ -2,7 +2,9 @@ const express = require('express')
 const bcrypt = require('bcrypt')
 const fs = require('fs')
 const path = require('path')
-const { use } = require('bcrypt/promises')
+const {
+	use
+} = require('bcrypt/promises')
 const session = require('express-session')
 const app = express()
 
@@ -22,7 +24,10 @@ app.use(
 
 app.post('/register', async (req, res) => {
 	try {
-		const { username, password } = req.body
+		const {
+			username,
+			password
+		} = req.body
 		// Проверяем, не существует ли уже пользователь с таким именем
 		const users = JSON.parse(fs.readFileSync('users.json', 'utf8'))
 		const userExists = users.find(user => user.username === username)
@@ -32,7 +37,11 @@ app.post('/register', async (req, res) => {
 		// Хэшируем пароль
 		const hashedPassword = await bcrypt.hash(password, 10)
 		// Создаем нового пользователя
-		const newUser = { username, password: hashedPassword, completedTests: [] }
+		const newUser = {
+			username,
+			password: hashedPassword,
+			completedTests: []
+		}
 		users.push(newUser)
 		// Сохраняем обновленный список пользователей
 		fs.writeFileSync('users.json', JSON.stringify(users, null, 2))
@@ -44,7 +53,10 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
 	try {
-		const { username, password } = req.body
+		const {
+			username,
+			password
+		} = req.body
 		const users = JSON.parse(fs.readFileSync('users.json', 'utf8'))
 		const user = users.find(user => user.username === username)
 		if (!user) {
@@ -87,9 +99,13 @@ app.post('/logout', (req, res) => {
 
 function checkAuthentication(req, res, next) {
 	if (req.session.user) {
-		next() // Пользователь авторизован, продолжаем обработку запроса
+		console.log('Пользователь авторизован:', req.session.user.username);
+		next();
 	} else {
-		res.status(401).json({ message: 'Пользователь не авторизован' }) // Пользователь не авторизован, возвращаем ошибку
+		console.log('Попытка доступа неавторизованным пользователем');
+		res.status(401).json({
+			message: 'Пользователь не авторизован'
+		});
 	}
 }
 
@@ -98,7 +114,9 @@ app.use('/api', checkAuthentication)
 
 app.get('/api/user', (req, res) => {
 	// Возвращаем данные пользователя
-	res.json({ username: req.session.user.username })
+	res.json({
+		username: req.session.user.username
+	})
 })
 
 app.get('/api/tests', (req, res) => {
@@ -108,15 +126,60 @@ app.get('/api/tests', (req, res) => {
 		fs.readFile(testsFilePath, 'utf8', (err, data) => {
 			if (err) {
 				console.error(err)
-				res.status(500).json({ message: 'Ошибка при загрузке списка тестов' })
+				res.status(500).json({
+					message: 'Ошибка при загрузке списка тестов'
+				})
 			} else {
 				res.json(JSON.parse(data))
 			}
 		})
 	} else {
-		res.status(401).json({ message: 'Пользователь не авторизован' })
+		res.status(401).json({
+			message: 'Пользователь не авторизован'
+		})
 	}
 })
+
+
+
+// Эндпоинт для создания нового теста
+app.post('/api/tests', (req, res) => {
+	const newTest = req.body; // Получаем данные нового теста из тела запроса
+	const testsFilePath = path.join(__dirname, 'tests.json'); // Путь к файлу tests.json
+
+	// Чтение текущего содержимого файла tests.json
+	fs.readFile(testsFilePath, 'utf8', (err, data) => {
+		if (err) {
+			// Если произошла ошибка чтения файла
+			console.error('Ошибка при чтении файла tests.json:', err);
+			res.status(500).json({
+				message: 'Ошибка при чтении файла tests.json'
+			});
+			return;
+		}
+
+		// Парсинг существующих данных файла tests.json
+		const tests = JSON.parse(data);
+		// Добавление нового теста в массив тестов
+		tests.unshift(newTest);
+
+		// Запись обновленного массива тестов обратно в файл tests.json
+		fs.writeFile(testsFilePath, JSON.stringify(tests, null, 2), (err) => {
+			if (err) {
+				// Если произошла ошибка записи в файл
+				console.error('Ошибка при записи в файл tests.json:', err);
+				res.status(500).json({
+					message: 'Ошибка при записи в файл tests.json'
+				});
+				return;
+			}
+			// Отправка ответа об успешном создании теста
+			res.status(201).json({
+				message: 'Тест успешно создан'
+			});
+		});
+	});
+});
 
 function readTestsFile(callback) {
 	const filePath = path.join(__dirname, 'tests.json')
@@ -144,7 +207,10 @@ app.get(`/api/tests/:testId`, (req, res) => {
 			// Отправляем тест без правильных ответов
 			const testWithoutAnswers = {
 				...test,
-				questions: test.questions.map(q => ({ id: q.id, text: q.text })),
+				questions: test.questions.map(q => ({
+					id: q.id,
+					text: q.text
+				})),
 			}
 			res.json(testWithoutAnswers)
 		} else {
@@ -154,39 +220,105 @@ app.get(`/api/tests/:testId`, (req, res) => {
 	})
 })
 
-// Эндпоинт для обработки ответов на тест
+function addCompletedTestToUser(username, testId, correctAnswersCount, totalQuestions) {
+	const usersFilePath = path.join(__dirname, 'users.json');
+	fs.readFile(usersFilePath, 'utf8', (err, data) => {
+		if (err) {
+			console.error('Ошибка при чтении файла users.json:', err);
+			return;
+		}
+
+		const users = JSON.parse(data);
+		const user = users.find(u => u.username === username);
+		if (user) {
+			const completedTest = {
+				testId: testId,
+				score: correctAnswersCount,
+				total: totalQuestions
+			};
+
+			if (!user.completedTests) {
+				user.completedTests = []; // Если у пользователя нет массива completedTests, создаем его
+			}
+			user.completedTests.push(completedTest);
+
+			fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), (err) => {
+				if (err) {
+					console.error('Ошибка при записи в файл users.json:', err);
+				} else {
+					console.log(`Результаты теста для пользователя ${username} обновлены.`);
+				}
+			});
+		} else {
+			console.error('Пользователь не найден:', username);
+		}
+	});
+}
+
+// Эндпоинт для обработки ответов на тест и записи результатов для пользователя
 app.post(`/api/tests/:testId/submit`, (req, res) => {
-	const testId = req.params.testId
-	const providedAnswers = req.body.answers // Предполагается, что ответы приходят в формате { questionId: answer, ... }
+	const testId = req.params.testId;
+	const providedAnswers = req.body.answers; // Предполагается, что ответы приходят в формате { questionId: answer, ... }
 
 	readTestsFile((err, tests) => {
 		if (err) {
-			res.status(500).send('Ошибка при загрузке тестов')
-			return
+			res.status(500).send('Ошибка при загрузке тестов');
+			return;
 		}
-		const test = tests.find(t => t.id === testId)
+		const test = tests.find(t => t.id === testId);
 		if (!test) {
-			res.status(404).send('Тест не найден')
-			return
+			res.status(404).send('Тест не найден');
+			return;
 		}
 
-		let correctAnswersCount = 0
+		// Рассчитываем количество правильных ответов
+		let correctAnswersCount = 0;
+		console.log('Предоставленные ответы:', providedAnswers);
 		test.questions.forEach(question => {
-			const providedAnswer = providedAnswers[question.id]
+			console.log('Правильный ответ:', question.correctAnswer);
+			const providedAnswer = providedAnswers[question.id];
+			console.log('Ответ пользователя:', providedAnswer);
+
 			if (providedAnswer && providedAnswer === question.correctAnswer) {
-				correctAnswersCount++
+				correctAnswersCount++;
 			}
-		})
+		});
 
-		const result = {
-			testId: testId,
-			correctAnswersCount: correctAnswersCount,
-			totalQuestions: test.questions.length,
+		// Получаем название теста
+		const testName = test.title;
+
+		// Ищем пользователя и добавляем информацию о тесте
+		const username = req.session.user.username; // Получаем имя пользователя из сессии
+		const usersFilePath = path.join(__dirname, 'users.json');
+		const usersData = JSON.parse(fs.readFileSync(usersFilePath, 'utf8'));
+		const user = usersData.find(u => u.username === username);
+
+		if (user) {
+			// Если пользователь найден, добавляем информацию о пройденном тесте
+			const completedTestInfo = {
+				testName,
+				score: correctAnswersCount,
+			};
+			if (!user.completedTests) {
+				user.completedTests = []; // Если у пользователя нет массива completedTests, создаем его
+			}
+			user.completedTests.push(completedTestInfo);
+
+			// Записываем обновленные данные пользователей обратно в файл
+			fs.writeFileSync(usersFilePath, JSON.stringify(usersData, null, 2));
+
+			// Отправляем результаты теста пользователю
+			res.json({
+				testId: testId,
+				testName: testName,
+				score: correctAnswersCount,
+				totalQuestions: test.questions.length
+			});
+		} else {
+			res.status(404).send('Пользователь не найден');
 		}
-
-		res.json(result)
-	})
-})
+	});
+});
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`))

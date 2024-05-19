@@ -34,7 +34,7 @@ function fetchTests() {
 			testsListElement.innerHTML = '' // Очищаем список
 			tests.forEach(test => {
 				const listItem = document.createElement('li')
-				listItem.textContent = test.name // Предполагается, что у тестов есть свойство 'name'
+				listItem.textContent = test.title // Предполагается, что у тестов есть свойство 'name'
 				// Добавляем обработчик клика, который будет перенаправлять пользователя на страницу теста
 				listItem.addEventListener('click', () => {
 					window.location.href = `/test-page.html?testId=${test.id}`
