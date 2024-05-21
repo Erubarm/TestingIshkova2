@@ -1,5 +1,31 @@
 [
   {
+    "id": "407a7a4f-686f-4af2-a636-103579a5a848",
+    "title": " YES or NO",
+    "questions": [
+      {
+        "id": "8ff2c0a3-6533-4859-afdf-f2828d60e590",
+        "text": "YES",
+        "correctAnswer": "Да"
+      },
+      {
+        "id": "cc0cb61e-a82f-4c84-ab15-2ffd3a4f3bab",
+        "text": "NO",
+        "correctAnswer": "Нет"
+      },
+      {
+        "id": "ebfa6d05-1bbf-4802-acb4-0b8ab2da6832",
+        "text": "NO",
+        "correctAnswer": "Нет"
+      },
+      {
+        "id": "4bf5acc7-6faa-48cd-84d7-baf597599f79",
+        "text": "NO",
+        "correctAnswer": "Нет"
+      }
+    ]
+  },
+  {
     "id": "9741a547-da72-47fa-a24d-69c819725a56",
     "title": "2",
     "questions": [

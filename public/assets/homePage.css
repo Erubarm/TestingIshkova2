@@ -50,26 +50,57 @@ main h2 {
 	margin-bottom: 20px;
 }
 
-ul#tests-list {
-	list-style: none;
-	padding-left: 0;
+/* Стили для списка тестов */
+#tests-list {
+    list-style-type: none;
+    padding: 0;
 }
 
-ul#tests-list li {
-	background-color: #ffffff;
-	padding: 15px;
-	margin-bottom: 10px;
-	border-radius: 4px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	cursor: pointer;
-	transition: background-color 0.2s, box-shadow 0.2s;
+/* Стили для каждой карточки теста */
+#tests-list li {
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
 }
 
-ul#tests-list li:hover {
-	background-color: #edf2f7;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+#tests-list li:hover {
+    transform: translateY(-5px);
 }
 
+/* Стили для текста теста */
+#tests-list li span {
+    font-size: 18px;
+    color: #333333;
+}
+
+/* Стили для кнопки добавления в избранное */
+button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+button:focus {
+    outline: none;
+}
+
+/* Стили для SVG иконки в кнопке */
+button svg {
+    fill: #1C274C;
+    transition: fill 0.2s ease;
+}
+
+button:hover svg {
+    fill: #FFA500;
+}
 .create-test-button {
 	background-color: #3182ce;
 	color: white;

@@ -320,5 +320,49 @@ app.post(`/api/tests/:testId/submit`, (req, res) => {
 	});
 });
 
+app.post('/api/favorites/add', (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).send('Пользователь не авторизован');
+    }
+
+    const { testId } = req.body;
+    if (!testId) {
+        return res.status(400).send('ID теста не указан');
+    }
+
+    const usersFilePath = path.join(__dirname, 'users.json');
+    fs.readFile(usersFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Ошибка при чтении файла users.json:', err);
+            return res.status(500).send('Ошибка сервера');
+        }
+
+        const users = JSON.parse(data);
+        const user = users.find(u => u.username === req.session.user.username);
+        if (!user) {
+            return res.status(404).send('Пользователь не найден');
+        }
+
+        if (!user.favorites) {
+            user.favorites = []; // Создаем массив избранных тестов, если он еще не существует
+        }
+
+        // Проверяем, не добавлен ли уже тест в избранное
+        if (!user.favorites.includes(testId)) {
+            user.favorites.push(testId); // Добавляем тест в избранное
+            // Записываем обновленные данные пользователей обратно в файл
+            fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), (err) => {
+                if (err) {
+                    console.error('Ошибка при записи в файл users.json:', err);
+                    return res.status(500).send('Ошибка сервера');
+                }
+                res.send('Тест добавлен в избранное');
+            });
+        } else {
+            res.send('Тест уже находится в избранном');
+        }
+    });
+});
+
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`))

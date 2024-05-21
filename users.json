@@ -61,5 +61,20 @@
         "score": 2
       }
     ]
+  },
+  {
+    "username": "er",
+    "password": "$2b$10$CIxhP8F84UVmIFlcq5AgAuhsaW6fQV3Zd2uCjijXVqGigivZ0MYkK",
+    "completedTests": [
+      {
+        "testName": " YES or NO",
+        "score": 4
+      }
+    ],
+    "favorites": [
+      "9741a547-da72-47fa-a24d-69c819725a56",
+      "1716148238461",
+      "407a7a4f-686f-4af2-a636-103579a5a848"
+    ]
   }
 ]
